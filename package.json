@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "bootstrap": "^5.3.3",
+    "firebase": "^10.12.5",
+    "mongoose": "^8.3.4",
+    "papaparse": "^5.4.1",
+    "react-bootstrap": "^2.10.4",
+    "react-canvas-confetti": "^2.0.7",
+    "react-firebase-hooks": "^5.1.1"
+  }
+}
