@@ -6,7 +6,7 @@ import updateUserData from "./updateUserData";
 const createNewGame = async (userEmail, date) => {
   try {
     const userRef = doc(db, "games", userEmail);
-    const movieData = await fetchDailyMovie(date);
+    let movieData = await fetchDailyMovie(date);
 
     if (movieData) {
       //console.log("Fetched movie:", movieData);
