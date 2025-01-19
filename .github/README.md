@@ -4,6 +4,25 @@ You can play the game at: [https://oskarandre.github.io/filmdle.github.io/](http
 
 ![Preview Image](Preview.png)
 
+## How to Play
+
+1. Log in or sign up using your Firebase account.
+2. Each day, a new secret movie is selected for you to guess.
+3. Use the search function to find movies and make your guess.
+4. Receive feedback with color-coordinated clues based on actors, director, release year, genres and rating.
+
+### Feedback Colors
+
+- **Red**: No similarities.
+- **Yellow**: One or more correct.
+- **Green**: Fully correct.
+
+5. You can leave the game and come back later or give up if needed.
+6. Play older previous games in Archive.
+8. Check your stats to see your progress and performance.
+
+## About
+
 We have created a game similiar to Wordle where the user can daily guess the correct movie.
 The tools we used are Firebase, express, node and React, or FERN for short.
 
@@ -23,7 +42,11 @@ The project includes the following functions:
 To install dependencies, run the following commands:
 ```bash
 npm install
+```
+```bash
 npm i vite
+```
+```bash
 npm i canvas-confetti
 ```
 
