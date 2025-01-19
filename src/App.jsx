@@ -7,6 +7,7 @@ import Login from './Login.jsx';
 import Stats from './stats.jsx';
 import Archive from './Userarchive.jsx';
 import FetchUserGameData from './FetchUserGameData.jsx';
+import background from './assets/background_2.png';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -42,7 +43,7 @@ function App() {
   return (
     <div>
       <div className='bg'>
-        <img className='bg-image' src='/src/assets/background_2.png' alt=""></img>
+        <img className='bg-image' src={background} alt=""></img>
       </div>
       <div className='app'>
         {user ? (

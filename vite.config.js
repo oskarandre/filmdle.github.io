@@ -5,4 +5,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   base: '/filmdle.github.io/',
+  build: {
+    assetsInlineLimit: 0, // Optional: Set to 0 to disable inlining of assets
+  },
 })

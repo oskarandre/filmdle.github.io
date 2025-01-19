@@ -9,6 +9,7 @@ import GiveUp from './GiveUp.jsx';
 
 import { db } from '../firebase/firebaseConfig';
 import { setDoc, doc, increment, updateDoc } from "firebase/firestore";
+import filmdleLogo from './assets/filmdle-text.png';
 
 
 function finishedGame(userEmail, date) {
@@ -38,8 +39,8 @@ function setUserStats(userEmail, guesses, win) {
     finished: true,                             // Mark the game as finished
     "userData.total_guesses": increment(guesses + 1), // Increment total_guesses by the number of guesses in this game
     "userData.wins": win ? increment(1) : increment(0), // Increment wins by 1 if it's a win
-    "userData.gamesPlayed" : increment(1),
-    "userData.totalUnderTen" : guesses < 11 ? increment(1) : increment(0)
+    "userData.gamesPlayed": increment(1),
+    "userData.totalUnderTen": guesses < 11 ? increment(1) : increment(0)
   };
 
   // Use updateDoc to merge specific fields without overwriting entire nested objects
@@ -80,7 +81,7 @@ function DailyGame({ userEmail, date, gameStatus, gaveUpStatus, correctMovieId, 
       }
       return prevSelectedMovies;
     });
-    return information; 
+    return information;
   };
 
   const handleMovieSelect = async (movie) => {
@@ -113,12 +114,12 @@ function DailyGame({ userEmail, date, gameStatus, gaveUpStatus, correctMovieId, 
           <div className="col-md-10 text-center">
             <div className="search-logo-container">
               <div className="logo-box">
-                <img src="/src/assets/filmdle-text.png" className="logo" alt="Logo" />
+                <img src={filmdleLogo} className="logo" alt="Logo" />
               </div>
               {isFinished || gameStatus ? (
                 <div className="Winning-Card">
                   {gaveUp || gaveUpStatus ? (
-                    <h2>You gave up. Better luck next time...</h2>  
+                    <h2>You gave up. Better luck next time...</h2>
                   ) : (
                     <h2>Well played! You guessed the movie!</h2>
                   )}
@@ -138,7 +139,7 @@ function DailyGame({ userEmail, date, gameStatus, gaveUpStatus, correctMovieId, 
               <div className="display-guesses">
                 <h3 className="text-white">Guesses: {selectedMovies.length}</h3>
               </div>
-              <GiveUp userEmail={userEmail} date={date} handleMovieSelectById={handleMovieSelectById} correctMovieId={correctMovieId} setIsFinished={setIsFinished} setGaveUp={setGaveUp} nGuesses={selectedMovies.length}/>
+              <GiveUp userEmail={userEmail} date={date} handleMovieSelectById={handleMovieSelectById} correctMovieId={correctMovieId} setIsFinished={setIsFinished} setGaveUp={setGaveUp} nGuesses={selectedMovies.length} />
             </div>
           </div>
         </div>

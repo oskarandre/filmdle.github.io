@@ -1,7 +1,8 @@
 import React from 'react';
-import { doc, setDoc, increment, updateDoc } from 'firebase/firestore'; // Import necessary Firestore functions
+import { doc, setDoc, increment, updateDoc } from 'firebase/firestore'; 
 import { db } from '../firebase/firebaseConfig';
-import guessMovie from '../scripts/guessMovie.js'; // Import the guessMovie function
+import guessMovie from '../scripts/guessMovie.js'; 
+import skullIcon from './assets/skull-white.png'; 
 
 function GiveUp({ userEmail, date, handleMovieSelectById, correctMovieId, setIsFinished, setGaveUp, nGuesses}) {
   // Make sure to pass props as an object
@@ -57,7 +58,7 @@ function GiveUp({ userEmail, date, handleMovieSelectById, correctMovieId, setIsF
     <div className="give-up">
       <button className="btn-give-up" onClick={() => giveUp(userEmail, date)}>
         Give up? 
-        <img className="skull-icon" src="\src\assets\skull-white.png" alt="skull-icon"/>
+        <img className="skull-icon" src={skullIcon} alt="skull-icon"/>
       </button>
     </div>
   );
