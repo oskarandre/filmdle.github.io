@@ -4,22 +4,25 @@ import { auth } from '../firebase/firebaseConfig';
 import Header from './Header.jsx';
 import Logout from './Logout.jsx';
 import Login from './Login.jsx';
+import LoginBtn from './LoginBtn.jsx';
 import Stats from './stats.jsx';
 import Archive from './Userarchive.jsx';
 import FetchUserGameData from './FetchUserGameData.jsx';
 import background from './assets/background_2.png';
+import tmdbLogo from './assets/tmdbLogo.svg';
 
 function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedNavItem, setSelectedNavItem] = useState('todaysGame'); 
+  const [showLogin, setShowLogin] = useState(false);
   const today = new Date().toISOString().split('T')[0];
-
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
       setLoading(false);
+      setShowLogin(false);
     });
 
     return () => unsubscribe();
@@ -29,14 +32,34 @@ function App() {
     return <div>Loading...</div>;
   }
 
+  const handleLoginClose = () => {
+    setSelectedNavItem('todaysGame');
+    setShowLogin(false);
+  };
+
+
+
   const renderContent = (userEmail) => {
     switch (selectedNavItem) {
       case 'todaysGame':
-        return <FetchUserGameData userEmail={userEmail} date={today} />
+        return <FetchUserGameData userEmail={userEmail} date={today} />;
       case 'archive':
-        return <Archive userEmail={userEmail} />;
+        if (user) {
+          return <Archive userEmail={userEmail} />;
+        }
+        else{
+          setTimeout(() => setShowLogin(true), 0);
+          return null;
+        }
       case 'stats':
-        return <Stats userEmail={userEmail} />;
+        if (user) {
+          return <Stats userEmail={userEmail} />;
+        } else {
+          setTimeout(() => setShowLogin(true), 0);
+          return null;
+        }
+      default:
+        return null;
     }
   };
 
@@ -46,27 +69,27 @@ function App() {
         <img className='bg-image' src={background} alt=""></img>
       </div>
       <div className='app'>
-        {user ? (
+        {
           <>
             <div className='HeadWrapper'>
-              <Header onNavItemClick={setSelectedNavItem} />
-              <Logout />
+              <Header onNavItemClick={setSelectedNavItem} selectedNavItem={selectedNavItem} />
+              {user ? <Logout /> : <LoginBtn onLoginClick={() => setShowLogin(true)} />}
             </div>
             <div className='content'>
-            {renderContent(user.email)}
+              {renderContent(user ? user.email : null)}
             </div>
+            {showLogin && <Login onClose={() => handleLoginClose()} />}
           </>
-        ) : (
-          <>
-            <div className='HeadWrapper'>
-            <Header onNavItemClick={setSelectedNavItem} />
-            <Login />
-            </div>
-          </>
-        )}
+        }
+      </div>
+      {/* <p className='footer'>© 2024 Filmdle</p> */}
+      <div className='tmdb'>
+        <p className='tmdbText'>Powered by</p>
+        <img className='tmdbLogo' src={tmdbLogo} alt="TMDB Logo" />
       </div>
     </div>
   );
 }
+
 
 export default App;

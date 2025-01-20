@@ -12,29 +12,31 @@ const UserGameData = ({ userEmail, date }) => {
   const [newGameCreated, setNewGameCreated] = useState(false);
   const [finishedGame, setFinishedGame] = useState(false);
   const [gaveUp, setGaveUp] = useState(false);
-  
-
 
   useEffect(() => {
     const fetchUserGameData = async () => {
       try {
-        const userGameDocRef = doc(db, "games", userEmail);
+        if (!userEmail) {
+          // Handle the case when userEmail is not provided
+          console.log(`No user email provided, creating new game for guest user`);
+          await createNewGame('guest', date);
+          setNewGameCreated(true);
+          setIsLoading(false);
+          return;
+        }
 
+        const userGameDocRef = doc(db, "games", userEmail);
         const userGameDocSnap = await getDoc(userGameDocRef);
 
         if (userGameDocSnap.exists()) {
-          // User's game document exists, check for the specific date
           const userGameData = userGameDocSnap.data();
 
           if (userGameData.hasOwnProperty(date)) {
-            // Date exists, proceed with the existing daily game data
             setCorrectMovieId(userGameData[date].correct_movie.id);
             setMovieGuesses(userGameData[date].guesses_id);
             setFinishedGame(userGameData[date].finished);
             setGaveUp(userGameData[date].gave_up);
-
           } else {
-            // Date doesn't exist, create a new entry for the date
             console.log(`No game data found for ${date}, creating new game for user ${userEmail}`);
             await createNewGame(userEmail, date);
             setNewGameCreated(true);
@@ -49,20 +51,7 @@ const UserGameData = ({ userEmail, date }) => {
     };
 
     fetchUserGameData();
-  }, [userEmail, date, newGameCreated , correctMovieId]);
-
-  useEffect(() => {
-    if (correctMovieId !== null) {
-      //console.log("Correct Movie ID updated: ", correctMovieId);
-    }
-  }, [correctMovieId]);
-
-  useEffect(() => {
-    if (movieGuesses !== null) {
-      //console.log("Guesses updated: ", movieGuesses);
-    }
-  }, [movieGuesses]);
-
+  }, [userEmail, date, newGameCreated, correctMovieId]);
 
   if (isLoading) {
     return <p>Loading game data...</p>;

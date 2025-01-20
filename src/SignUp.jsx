@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { setDoc, doc, Timestamp } from "firebase/firestore";
 import { signUp } from '../firebase/auth';
 import { db } from '../firebase/firebaseConfig';
+import loginLogo from './assets/logo_white.png';
 
 const SignUp = () => {
   const [email, setEmail] = useState('');
@@ -53,7 +54,7 @@ const SignUp = () => {
   return (
     <div>
       <div className='login-header'>
-        <img className="logo-login" src="\src\assets\logo_white.png" />
+        <img className="logo-login" src={loginLogo} />
         <h2>Sign up</h2>
       </div>
 

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { login } from '../firebase/auth';
 import SignUp from './SignUp.jsx';
+import loginLogo from './assets/logo_white.png';
 
-
-const Login = () => {
+const Login = ({ onClose }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
@@ -21,7 +21,7 @@ const Login = () => {
   };
 
   return (
-    <div>
+    <div className='login-background'>
     {showSignUp ? (
       <div  className='login-page'> 
       <b className="back-to-login" onClick={() => setShowSignUp(false)}>Back</b>,
@@ -29,8 +29,11 @@ const Login = () => {
       </div>
     ) : (
     <div className='login-page'>
+      <div className='close-btn'>
+      <b className="close-login" onClick={onClose}>X</b>
+      </div>
       <div className='login-header'> 
-      <img className="logo-login" src="\src\assets\logo_white.png" />
+      <img className="logo-login" src={loginLogo} />
       <h2>Login</h2>
       </div>
       {error && <p>{error}</p>}

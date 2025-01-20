@@ -22,6 +22,7 @@ You can play the game at: [https://oskarandre.github.io/filmdle.github.io/](http
 8. Check your stats to see your progress and performance.
 
 ## About
+
 Created by [Oskar André](https://github.com/oskarandre) & [Gustaf Almesåker](https://github.com/gustafalmesaker)
 
 We have created a game similiar to Wordle where the user can daily guess the correct movie.
