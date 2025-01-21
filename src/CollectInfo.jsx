@@ -1,4 +1,3 @@
-import { useCallback, useEffect } from 'react';
 import { fetchMovie, fetchCredits } from '../scripts/api';
 
 export const CollectInfo = async ({ movie_id }) => {

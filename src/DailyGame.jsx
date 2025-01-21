@@ -11,8 +11,9 @@ import { db } from '../firebase/firebaseConfig';
 import { setDoc, doc, increment, updateDoc } from "firebase/firestore";
 import filmdleLogo from './assets/filmdle-text.png';
 
-
 function finishedGame(userEmail, date) {
+  if (!userEmail) return; // Skip for guest user
+
   const userGameDocRef = doc(db, 'games', userEmail);
 
   const initData = {
@@ -32,6 +33,8 @@ function finishedGame(userEmail, date) {
 
 //updating stats for personal view.
 function setUserStats(userEmail, guesses, win) {
+  if (!userEmail) return; // Skip for guest user
+
   // Reference to the game document in Firestore
   const userGameDocRef = doc(db, 'games', userEmail);
 
@@ -52,7 +55,6 @@ function setUserStats(userEmail, guesses, win) {
       console.error('Error updating user game data:', error);
     });
 }
-
 
 function DailyGame({ userEmail, date, gameStatus, gaveUpStatus, correctMovieId, movieGuesses: initialMovieGuesses }) {
   const [selectedMovies, setSelectedMovies] = useState([]);

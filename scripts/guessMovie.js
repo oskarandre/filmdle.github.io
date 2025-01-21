@@ -2,6 +2,12 @@ import { doc, setDoc, getDoc } from "firebase/firestore";
 import { db } from '../firebase/firebaseConfig';
 
 const guessMovie = async (userEmail, date, information) => {
+    // Early return for guest user before any Firestore operations
+    if (!userEmail || userEmail === 'guest') {
+        console.log("Guest user - skipping Firestore operations");
+        return;
+    }
+
     try {
         const userRef = doc(db, "games", userEmail);
         const userDoc = await getDoc(userRef);
@@ -9,16 +15,18 @@ const guessMovie = async (userEmail, date, information) => {
             const gameData = userDoc.data();
             // Check if a game exists for the specified date
             if (gameData[date]) {
+                // Initialize guesses_title and guesses_id if they don't exist
+                const guessesTitle = gameData[date].guesses_title || [];
+                const guessesId = gameData[date].guesses_id || [];
+
                 // Check for duplicate guesses
-                if (gameData[date].guesses_title.includes(information.title)) {
+                if (guessesTitle.includes(information.title)) {
                     console.log("You already guessed this movie!");
                     return;
                 } else {
                     // Add guess to array
-                    const updatedGuessTitle = [...gameData[date].guesses_title, information.title];
-                    const updatedGuessId = [...gameData[date].guesses_id, information.id];
-
-                    //console.log("updatedGuessID" , updatedGuessId)
+                    const updatedGuessTitle = [...guessesTitle, information.title];
+                    const updatedGuessId = [...guessesId, information.id];
 
                     await setDoc(userRef, {
                         [date]: {
@@ -29,7 +37,18 @@ const guessMovie = async (userEmail, date, information) => {
                     }, { merge: true });
                 }
             } else {
-                console.log(`No game found for ${userEmail} on ${date}`);
+                // Initialize the game data for the specified date if it doesn't exist
+                const newGameData = {
+                    [date]: {
+                        guesses_title: [information.title],
+                        guesses_id: [information.id],
+                        correct_movie: gameData[date]?.correct_movie || null,
+                        finished: gameData[date]?.finished || false,
+                        gave_up: gameData[date]?.gave_up || false
+                    }
+                };
+                await setDoc(userRef, newGameData, { merge: true });
+                console.log(`No game found for ${userEmail} on ${date}, initializing new game data.`);
             }
         } else {
             console.log(`User ${userEmail} not found.`);

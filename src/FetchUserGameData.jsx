@@ -16,19 +16,16 @@ const UserGameData = ({ userEmail, date }) => {
   useEffect(() => {
     const fetchUserGameData = async () => {
       try {
+        let localUser = false;
         if (!userEmail) {
-          // Handle the case when userEmail is not provided
-          console.log(`No user email provided, creating new game for guest user`);
-          await createNewGame('guest', date);
-          setNewGameCreated(true);
-          setIsLoading(false);
-          return;
+          userEmail = "guest";
+          localUser = true;
         }
 
         const userGameDocRef = doc(db, "games", userEmail);
         const userGameDocSnap = await getDoc(userGameDocRef);
 
-        if (userGameDocSnap.exists()) {
+        if (userGameDocSnap.exists() && !localUser) {
           const userGameData = userGameDocSnap.data();
 
           if (userGameData.hasOwnProperty(date)) {
@@ -41,6 +38,10 @@ const UserGameData = ({ userEmail, date }) => {
             await createNewGame(userEmail, date);
             setNewGameCreated(true);
           }
+        } else {
+          console.log(`Creating new game for guest user on ${date}`);
+          await createNewGame(userEmail, date, localUser);
+          setNewGameCreated(true);
         }
       } catch (error) {
         setError("Error fetching user game data");
