@@ -11,12 +11,19 @@ import FetchUserGameData from './FetchUserGameData.jsx';
 import background from './assets/background_2.png';
 import tmdbLogo from './assets/tmdbLogo.svg';
 
+// REMOVE WHEN BUG IS FIXED
+import Modal from './modal.jsx';
+
 function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedNavItem, setSelectedNavItem] = useState('todaysGame'); 
   const [showLogin, setShowLogin] = useState(false);
   const today = new Date().toISOString().split('T')[0];
+
+  // REMOVE WHEN BUG IS FIXED
+  const [showModal, setShowModal] = useState(true); // State to control the modal visibility
+
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -27,6 +34,7 @@ function App() {
 
     return () => unsubscribe();
   }, []);
+
 
   if (loading) {
     return <div>Loading...</div>;
@@ -79,6 +87,10 @@ function App() {
               {renderContent(user ? user.email : null)}
             </div>
             {showLogin && <Login onClose={() => handleLoginClose()} />}
+
+            {/* REMOVE WHEN BUG IS FIXED */}
+            <Modal show={showModal} onClose={() => setShowModal(false)} /> {/* Add the Modal component */}
+
           </>
         }
       </div>
