@@ -18,13 +18,12 @@ jobs:
         uses: actions/setup-node@v3
 
       - name: Install dependencies
-        run: npm install
+        uses: bahmutov/npm-install@v1
 
       - name: Build project
         run: npm run build
 
-      - name: Add CNAME file
-        run: echo "filmdle.wtf" > ./dist/CNAME
+      
 
       - name: Upload production-ready build files
         uses: actions/upload-artifact@v3
@@ -36,12 +35,10 @@ jobs:
     name: Deploy
     needs: build
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-
-      - name: Download build files
+      - name: Download artifact
         uses: actions/download-artifact@v3
         with:
           name: production-files
